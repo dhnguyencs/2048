@@ -35,16 +35,21 @@ function initializeStuff(){
     for(i = 0; i < optionSelectionElements.length; i++){
         optionSelectionElements[i].addEventListener('click', function(){
             createBoard(this.id);
+            document.getElementById("title").style.top = 0 + "px";
             if (this.id == 4) {
                 document.getElementById("title").style.fontSize = 100 + "px";
                 document.getElementById("title").innerText = "2048";
             }if (this.id == 5) {
+                document.getElementById("title").style.fontSize = 100 + "px";
                 document.getElementById("title").innerText = "4096";
             } else if (this.id == 6) {
+                document.getElementById("title").style.fontSize = 100 + "px";
                 document.getElementById("title").innerText = "8192";
             } else if (this.id == 7) {
                 document.getElementById("title").innerText = "16384";
                 document.getElementById("title").style.fontSize = 80 + "px";
+                document.getElementById("title").style.top = 20 + "px";
+
             } 
         });
     }
