@@ -163,7 +163,7 @@ class gameBoard {
             document.getElementById("highestTile").innerText = "Highest Tile Achieved: " + this.getCookie("highestTile" + this.boardSize);
         }
 
-        //if the fetched cookie is greater than the high score
+        //if the fetched cookie is greater than the high score then set the highscore board to cookie, else we update the high score board to internal score
         if(this.score <= currentHighScore){
             document.getElementById("hiScore").innerText = "High Score: " + this.getCookie(this.boardSize);
         }else{
@@ -172,8 +172,7 @@ class gameBoard {
             document.getElementById("hiScore").innerText = "High Score: " + this.score;
         }
     }
-
-    displayArray() {
+    displayArray() { //displays this game's matrix to gameBoard. 
         for (let row = 0; row < this.gameArray.length; row++) {
             for (let col = 0; col < this.gameArray[0].length; col++) {
                 let cellID = `${row}${col}`;
@@ -194,8 +193,8 @@ class gameBoard {
             }
         }
     }
-    setTileFontSize(element, row, col){
-        element.firstChild.style.fontSize = 35 + "px";
+    setTileFontSize(element, row, col){ //set numbers font size to not overflow out of tiles. these are preset numbers, could probably do it a little more algorithmically. oh well
+        element.firstChild.style.fontSize = 35 + "px"; //accepts an element, and row and column to point to a location in this game's array
             if(this.boardSize == 4){
                 if(this.gameArray[row][col] > 9999){
                     element.firstChild.style.fontSize = 30 + "px";
@@ -232,7 +231,7 @@ class gameBoard {
                     element.firstChild.style.fontSize = 13 + "px";
                 }
         }
-    }
+    } //sets tile color, accepts a tile value, and the corrosponding element
     setTileColor(value, element) {
         switch (value) {
             case 2:
