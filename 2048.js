@@ -44,10 +44,15 @@ class gameBoard {
         this.createGameElements(size);
         // this.gameArray[0][0] = 1024;
         // this.gameArray[1][0] = 2048;
-        // this.gameArray[2][0] = 4096;
-        // this.gameArray[3][0] = 8192;
+        // this.gameArray[2][0] = 131072;
+        // this.gameArray[3][0] = 65536;
         // this.gameArray[0][0] = 16384;
         // this.gameArray[0][0] = 32768;
+        //now we create starting tiles
+        this.newRandomTile();
+        //and we display the game matrix to the newly created gameboard.
+        this.displayArray();
+        this.displayHighScore(); //displays high score to score tracker
     }
     createGameElements(size) {
         this.score = 0; //setting internal score tracker to 0
@@ -87,17 +92,12 @@ class gameBoard {
                 //paragragh creation. i should've probably generated a unique id for this as well. would have made some work later on easier. oh well.
                 let dataNode = document.createElement("p");
 
-                //after we create the ness. elements, we append
+                //after we create the ness. elements, we appendx`
                 cell.appendChild(dataNode);
                 tileContainer.appendChild(cell);
                 element.appendChild(tileContainer);
             }
         }
-        //now we create starting tiles
-        this.newRandomTile();
-        //and we display the game matrix to the newly created gameboard.
-        this.displayArray();
-        this.displayHighScore(); //displays high score to score tracker
     }
     calculateScore(value) { //accepts in tile value then calculate score earned (tileValue * requiredstreak), updates internal score and scoreboard, then returns the total 
         this.score = this.score + (value * this.requiredStreak); //score earned (tileValue * requiredStreak)
@@ -208,6 +208,8 @@ class gameBoard {
                     element.firstChild.style.fontSize = 25 + "px";
                 }else if(this.gameArray[row][col] < 99999){
                     element.firstChild.style.fontSize = 22 + "px";
+                }else if(this.gameArray[row][col] < 999999){
+                    element.firstChild.style.fontSize = 20 + "px";
                 }
             }else if(this.boardSize == 6){
                 if(this.gameArray[row][col] < 999){
@@ -216,6 +218,8 @@ class gameBoard {
                     element.firstChild.style.fontSize = 20 + "px";
                 }else if(this.gameArray[row][col] < 99999){
                     element.firstChild.style.fontSize = 18 + "px";
+                }else if(this.gameArray[row][col] < 999999){
+                    element.firstChild.style.fontSize = 16 + "px";
                 }
             }else if(this.boardSize == 7){
                 if(this.gameArray[row][col] < 999){
@@ -224,6 +228,8 @@ class gameBoard {
                     element.firstChild.style.fontSize = 18 + "px";
                 }else if(this.gameArray[row][col] < 99999){
                     element.firstChild.style.fontSize = 15 + "px";
+                }else if(this.gameArray[row][col] < 999999){
+                    element.firstChild.style.fontSize = 13 + "px";
                 }
         }
     }
@@ -297,7 +303,7 @@ class gameBoard {
                 element.style.setProperty("color", "#f9f6f2");
                 break;
             default:
-                element.style.setProperty("background-color", "CC33FF");
+                element.style.setProperty("background-color", "#525252");
                 element.style.setProperty("color", "#f9f6f2");
         }
     }
