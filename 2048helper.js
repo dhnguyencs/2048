@@ -72,9 +72,6 @@ function centerToParent(){
     var elements = document.getElementsByClassName("tile");
     for(i = 0; i < elements.length; i++){
         var firstchild = elements[i].firstElementChild;
-        if(newGame.returnGameSize() > 5){
-            firstchild.style.setProperty("font-size", "25px");
-        }
         firstchild.style.top = ((elements[i].offsetHeight - firstchild.offsetHeight) * .5) + "px";
     }
 }

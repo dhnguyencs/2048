@@ -35,10 +35,7 @@ function calculateMoveDirection() {
             newGame.MoveTile("up");
         }
     }
-    window.event.ontouchend = resetParameters;
-    window.event.ontouchmove = null;
-}
-function resetParameters(){
     x1 =0; y1 = 0; x2 = 0; y2 = 0;
     window.event.ontouchend = null;
+    window.event.ontouchmove = null;
 }

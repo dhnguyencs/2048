@@ -2,6 +2,9 @@
 var validMove = new Howl({
     src: ['moveboard.mp3']
   });
+// var invalidMove = new Howl({
+//     src: [''];
+// });
 
 class gameBoard {
     // defaultArray;
@@ -14,9 +17,6 @@ class gameBoard {
     movedTileList;
     hiScore;
     tileSize;
-    //sound effects
-    validMove
-    invalidMove
 
     constructor(size) {
         this.score = 0;
@@ -42,6 +42,11 @@ class gameBoard {
             this.numOfRandomTilesPerMove = 1;
         }
         this.createGameElements(size);
+        // this.gameArray[0][0] = 1024;
+        // this.gameArray[1][0] = 2048;
+        // this.gameArray[2][0] = 4096;
+        // this.gameArray[3][0] = 8192;
+        // this.gameArray[0][0] = 16384;
     }
     createGameElements(size) {
         document.getElementById("scoreTracker").innerText = "Score: " + this.score;
@@ -141,13 +146,43 @@ class gameBoard {
                     element.classList.add("active");
                     element.innerHTML = "<p>" + this.gameArray[row][col] + "</p>";
                     this.setTileColor(this.gameArray[row][col], element);
+                    this.setTileFontSize(element, row, col);
                 }
             }
         }
-        document.getElementById("tileContainer00").classList.add("topLeft");
-        document.getElementById("tileContainer0" + (this.gameArray.length-1)).classList.add("topRight");
-        document.getElementById("tileContainer" + (this.gameArray.length-1)+ "" + (this.gameArray.length-1)).classList.add("bottomRight");
-        document.getElementById("tileContainer" + (this.gameArray.length-1)+ "" + "0").classList.add("bottomLeft");
+    }
+    setTileFontSize(element, row, col){
+        element.firstChild.style.fontSize = 35 + "px";
+            if(this.boardSize == 4){
+                if(this.gameArray[row][col] > 9999){
+                    element.firstChild.style.fontSize = 30 + "px";
+                }
+            }
+            if(this.boardSize == 5){
+                if(this.gameArray[row][col] < 999){
+                    element.firstChild.style.fontSize = 30 + "px";
+                }else if(this.gameArray[row][col] < 9999){
+                    element.firstChild.style.fontSize = 25 + "px";
+                }else if(this.gameArray[row][col] < 99999){
+                    element.firstChild.style.fontSize = 25 + "px";
+                }
+            }else if(this.boardSize == 6){
+                if(this.gameArray[row][col] < 999){
+                    element.firstChild.style.fontSize = 25 + "px";
+                }else if(this.gameArray[row][col] < 9999){
+                    element.firstChild.style.fontSize = 20 + "px";
+                }else if(this.gameArray[row][col] < 99999){
+                    element.firstChild.style.fontSize = 18 + "px";
+                }
+            }else if(this.boardSize == 7){
+                if(this.gameArray[row][col] < 999){
+                    element.firstChild.style.fontSize = 22 + "px";
+                }else if(this.gameArray[row][col] < 9999){
+                    element.firstChild.style.fontSize = 18 + "px";
+                }else if(this.gameArray[row][col] < 99999){
+                    element.firstChild.style.fontSize = 16 + "px";
+                }
+        }
     }
     setTileColor(value, element) {
         switch (value) {
@@ -242,6 +277,7 @@ class gameBoard {
             document.getElementById(cellID).style.background = "#eedbcb";
             document.getElementById(cellID).classList.add("active");
             document.getElementById(cellID).innerHTML = "<p>" + this.gameArray[row][col] + "</p>";
+            this.setTileFontSize(document.getElementById(cellID), row, col);
         }
     }
     getRandomInt(max) {
@@ -555,7 +591,7 @@ class gameBoard {
                     }
                     if(probing === false){
                         document.getElementById(row+""+col).style.zIndex = index++;
-                    this.actuateTile(row, col, row, col_2, thisValue);
+                        this.actuateTile(row, col, row, col_2, thisValue);
                     }
                 }
             }
@@ -668,5 +704,8 @@ class gameBoard {
     }
     returnGameSize(){
         return this.boardSize;
+    }
+    returnGameArray(){
+        return this.gameArray;
     }
 }
