@@ -61,7 +61,7 @@ function createBoard(size) {
     let w = window.innerWidth;
     fillCorrectCircle(size);
     newGame = new gameBoard(size);
-    newGame.newRandomTile();
+    // newGame.newRandomTile();
     newGame.displayArray();
     centerWindow();
     centerToParent();

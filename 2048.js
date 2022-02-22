@@ -19,23 +19,23 @@ class gameBoard {
     tileSize;
 
     constructor(size) {
-        this.score = 0;
-        this.boardSize = size;
+        size = parseInt(size); //we parse size as an int
+        this.boardSize = size; //setting up basic tile size and difficulty configuration based on boardsize. tile size is in pixels.
         if (this.boardSize <= 4) {
             this.requiredStreak = 2;
             this.numOfRandomTilesPerMove = 1;
             this.tileSize = 102;
         } else if (this.boardSize == 5) {
             this.requiredStreak = 2;
-            this.numOfRandomTilesPerMove = 1;
+            this.numOfRandomTilesPerMove = 2;
             this.tileSize = 82;
         } else if (this.boardSize == 6) {
             this.requiredStreak = 2;
-            this.numOfRandomTilesPerMove = 2;
+            this.numOfRandomTilesPerMove = 3;
             this.tileSize = 68;
         } else if (this.boardSize == 7) {
             this.requiredStreak = 2;
-            this.numOfRandomTilesPerMove = 2;
+            this.numOfRandomTilesPerMove = 3;
             this.tileSize = 58;
         } else {
             this.requiredStreak = 3;
@@ -50,78 +50,120 @@ class gameBoard {
         // this.gameArray[0][0] = 32768;
     }
     createGameElements(size) {
-        document.getElementById("scoreTracker").innerText = "Score: " + this.score;
-        this.displayHighScore();
-        this.gameArray = new Array(size);
+        this.score = 0; //setting internal score tracker to 0
+        document.getElementById("scoreTracker").innerText = "Score: " + this.score; //setting score tracker to zero
+        this.gameArray = new Array(size); //creates a new game matrix based on input size
+        
+        //we are setting up the required css to complete the grid for gameboard
         let element = document.getElementById("gameBoard");
         element.style.setProperty('grid-template-columns', "repeat(" + size + ", minmax(0," + this.tileSize + "px))");
         element.style.setProperty('grid-template-rows', "repeat(" + size + ", minmax(0," + this.tileSize + "px))");
 
+        //resets the gameboard in case another one already exists
         element.innerHTML = "";
-
+        //cell, tile and matrix values init
         for (let i = 0; i < size; i++) {
             this.gameArray[i] = new Array(size);
             for (let j = 0; j < size; j++) {
+                //set game matrix
                 this.gameArray[i][j] = 0;
+                //cellid = example (row = 8, col 3) = 83
                 let cellID = `${i}${j}`;
+
+                //tile container holds a cell which holds the value of this cell's matrix in a paragraph tag
+                //create tile
                 let tileContainer = document.createElement("tileContainer");
                 tileContainer.id = "tileContainer" + cellID;
                 tileContainer.style.height = this.tileSize - 10 + "px";
                 tileContainer.style.width = this.tileSize - 10 + "px";
+
+                //create cell
                 let cell = document.createElement("div");
                 cell.id = cellID;
                 cell.classList.add("tile");
                 cell.style.height = this.tileSize - 9 + "px";
                 cell.style.width = this.tileSize - 9 + "px";
+
+                //paragragh creation. i should've probably generated a unique id for this as well. would have made some work later on easier. oh well.
                 let dataNode = document.createElement("p");
+
+                //after we create the ness. elements, we append
                 cell.appendChild(dataNode);
                 tileContainer.appendChild(cell);
                 element.appendChild(tileContainer);
             }
         }
+        //now we create starting tiles
+        this.newRandomTile();
+        //and we display the game matrix to the newly created gameboard.
+        this.displayArray();
+        this.displayHighScore(); //displays high score to score tracker
     }
-    calculateScore(value) {
-        this.score = this.score + (value * this.requiredStreak);
+    calculateScore(value) { //accepts in tile value then calculate score earned (tileValue * requiredstreak), updates internal score and scoreboard, then returns the total 
+        this.score = this.score + (value * this.requiredStreak); //score earned (tileValue * requiredStreak)
         document.getElementById("scoreTracker").innerText = "Score: " + this.score;
         return value * this.requiredStreak;
     }
-    scoreAnimate(moveTotal){
+    scoreAnimate(moveTotal){ //accepts the sum of a move's total earned score
         var id = null;
+        //initital top and right position precalculated for 100px and 0px
         var top = 100;
         var right = 0;
-        var offsetIncrements = 1;
-        var element = document.getElementById("floatingText");
-        element.innerText = "+" + moveTotal;
-        clearInterval(id);
-        id = setInterval(animateScore, 5);
+        var offsetIncrements = 1; //pixels moved per interval
+        var element = document.getElementById("floatingText"); //target of this animation, which is the element floatingtext
+        element.innerText = "+" + moveTotal; //setting innter text to moveTotal
+        clearInterval(id);//clearing interval in case there is an interval already occuring
+        
+        id = setInterval(animateScore, 5); //set interval
 
-        function animateScore(){
-            if(top >= 155){
+        function animateScore(){ //move element down 55px
+            if(top >= 155){ 
                 element.innerText = "";
                 element.style.top = 100 + "px";
                 element.style.right = 0 + "px";
                 clearInterval(id);
             }else{
-                if(top <= 155){
-                    if(top <= (155 - 25)){
-                        right = right - .06;
-                    }else{
-                        right = right + .06;
+                if(top <= 155){ //this if else corrects for overshoots in pixel increments per interval. its a nice check to have but not needed
+                    if(top <= (155 - 25)){ //if halfway over
+                        right = right - .06; //we shift element to the left 
+                    }else{ //we shift element to the right
+                        right = right + .06; 
                     }
-                    top = top + offsetIncrements;
+                    top = top + offsetIncrements; //we shift element down
                 }else{
                     top = 155;
                 }
-                element.style.top = top + "px";
+                //here we set elements calculated positions
+                element.style.top = top + "px"; 
                 element.style.right = right + "px";
             }
         }
     }
     displayHighScore(){
+        //if there isnt a highscore stored for this baord size, then we set one equals to zero
         if(this.getCookie(this.boardSize)===null){
             this.setCookie(this.boardSize,0);
         }
+        //if there isn't a highest tile achieved for this board size, then we set one equal zero.
+        if(this.getCookie(("highestTile" + this.boardSize)) === null){
+            this.setCookie(("highestTile" + this.boardSize),this.getMaxTileSize());
+        }
+
+        //we retrieve the high score and highest achived tile for this boardsize
+        var highestTile = this.getCookie("highestTile" + this.boardSize);
         var currentHighScore = this.getCookie(this.boardSize);
+
+        //if fetched cookie is greater than any tile in this game's array, then we set the high tile display to fetched cookie
+        if (highestTile >= this.getMaxTileSize()) {
+            document.getElementById("highestTile").innerText = "Highest Tile Achieved: " + highestTile;
+        }
+        else {
+            this.setCookie(("highestTile" + this.boardSize),this.getMaxTileSize());
+            document.getElementById("highestTile").style.color = "rgb(206, 94, 50)";
+            document.getElementById("highestTile").innerText = "Highest Tile Achieved: " + this.getCookie("highestTile" + this.boardSize);
+        }
+
+        //if the fetched cookie is greater than the high score
         if(this.score <= currentHighScore){
             document.getElementById("hiScore").innerText = "High Score: " + this.getCookie(this.boardSize);
         }else{
@@ -689,13 +731,24 @@ class gameBoard {
         this.displayHighScore();
         return movesAvailable;
     }
+    getMaxTileSize(){
+        var maxTile = 0;
+        for(var i = 0; i < this.gameArray.length; i++){
+            for(var j = 0; j < this.gameArray.length; j++){
+                if(maxTile <= this.gameArray[i][j]){
+                    maxTile = this.gameArray[i][j];
+                }
+            }
+        }
+        return maxTile;
+    }
     getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
         if (parts.length === 2) return parts.pop().split(';').shift();
     }
-    setCookie(GameSize,Score) {
-        document.cookie = GameSize + "=" + (Score || "") + ";"  + "expires=Fri, 31 Dec 9999 23:59:59 GMT" + "path=/";
+    setCookie(key,value) {
+        document.cookie = key + "=" + (value || "") + ";"  + "expires=Fri, 31 Dec 9999 23:59:59 GMT" + "path=/";
     }
     getCookie(name) {
         var nameEQ = name + "=";

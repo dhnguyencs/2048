@@ -133,7 +133,7 @@ h1{
     display: inline-block;
     float: right;
 }
-#hiScore{
+.subitems{
     font-size: 15px;
     position: relative;
     top: -20px;
