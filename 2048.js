@@ -27,15 +27,15 @@ class gameBoard {
             this.tileSize = 102;
         } else if (this.boardSize == 5) {
             this.requiredStreak = 2;
-            this.numOfRandomTilesPerMove = 2;
+            this.numOfRandomTilesPerMove = 1;
             this.tileSize = 82;
         } else if (this.boardSize == 6) {
             this.requiredStreak = 2;
-            this.numOfRandomTilesPerMove = 3;
+            this.numOfRandomTilesPerMove = 2;
             this.tileSize = 68;
         } else if (this.boardSize == 7) {
             this.requiredStreak = 2;
-            this.numOfRandomTilesPerMove = 4;
+            this.numOfRandomTilesPerMove = 2;
             this.tileSize = 58;
         } else {
             this.requiredStreak = 3;
@@ -47,6 +47,7 @@ class gameBoard {
         // this.gameArray[2][0] = 4096;
         // this.gameArray[3][0] = 8192;
         // this.gameArray[0][0] = 16384;
+        // this.gameArray[0][0] = 32768;
     }
     createGameElements(size) {
         document.getElementById("scoreTracker").innerText = "Score: " + this.score;
@@ -164,7 +165,7 @@ class gameBoard {
                 }else if(this.gameArray[row][col] < 9999){
                     element.firstChild.style.fontSize = 25 + "px";
                 }else if(this.gameArray[row][col] < 99999){
-                    element.firstChild.style.fontSize = 25 + "px";
+                    element.firstChild.style.fontSize = 22 + "px";
                 }
             }else if(this.boardSize == 6){
                 if(this.gameArray[row][col] < 999){
@@ -180,7 +181,7 @@ class gameBoard {
                 }else if(this.gameArray[row][col] < 9999){
                     element.firstChild.style.fontSize = 18 + "px";
                 }else if(this.gameArray[row][col] < 99999){
-                    element.firstChild.style.fontSize = 16 + "px";
+                    element.firstChild.style.fontSize = 15 + "px";
                 }
         }
     }
@@ -247,6 +248,10 @@ class gameBoard {
                 break;
             case 16384:
                 element.style.setProperty("background-color", "#CC33FF");
+                element.style.setProperty("color", "#f9f6f2");
+                break;
+            case 32768:
+                element.style.setProperty("background-color", "#525252");
                 element.style.setProperty("color", "#f9f6f2");
                 break;
             default:
